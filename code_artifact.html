@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#私の歌声図鑑</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandBg: '#F6E0E9',
+                        brandAccent: '#6486EC',
+                        brandAccentHover: '#5272d4',
+                        brandSoftPink: '#FDF0F5',
+                        brandCardBg: '#FFFFFF',
+                        brandText: '#333745',
+                        brandSubText: '#6C727F'
+                    },
+                    fontFamily: {
+                        yuGothic: ['"Yu Gothic"', '"游ゴシック"', '"YuGothic"', '"Hiragino Kaku Gothic ProN"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Yu Gothic", "游ゴシック", "YuGothic", "Hiragino Kaku Gothic ProN", sans-serif;
+            background-color: #F6E0E9;
+            color: #333745;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Glassmorphism & Soft Card Styles */
+        .glass-hero {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .soft-card {
+            background: #FFFFFF;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px -5px rgba(230, 180, 200, 0.3), 0 4px 12px -2px rgba(100, 134, 236, 0.08);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F6E0E9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C4B0D5;
+            border-radius: 4px;
+        }
+
+        /* Smooth page transitions */
+        .fade-in {
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .soundwave-line {
+            display: inline-block;
+            width: 3px;
+            background-color: #6486EC;
+            border-radius: 9999px;
+            animation: wave 1.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes wave {
+            0% { transform: scaleY(0.4); }
+            100% { transform: scaleY(1.1); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-pink-200 selection:text-brandAccent">
+
+    <!-- HEADER navigation -->
+    <header class="w-full max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+        <button onclick="navigateTo('top')" class="flex items-center gap-2 group text-left">
+            <!-- Soundwave SVG Logo -->
+            <div class="flex items-center gap-0.5 h-6">
+                <span class="soundwave-line h-3" style="animation-delay: 0.1s"></span>
+                <span class="soundwave-line h-5" style="animation-delay: 0.3s"></span>
+                <span class="soundwave-line h-3" style="animation-delay: 0.2s"></span>
+                <span class="soundwave-line h-6" style="animation-delay: 0.5s"></span>
+                <span class="soundwave-line h-4" style="animation-delay: 0.4s"></span>
+            </div>
+            <span class="font-bold text-lg md:text-xl tracking-tight text-slate-700 group-hover:text-brandAccent transition-colors">
+                #私の歌声図鑑
+            </span>
+        </button>
+
+        <nav class="flex items-center gap-3 text-xs md:text-sm font-medium text-slate-600">
+            <button onclick="navigateTo('top')" class="hover:text-brandAccent px-2 py-1 rounded-full transition-colors">この企画について</button>
+            <button onclick="startWizard()" class="hover:text-brandAccent px-2 py-1 rounded-full transition-colors">つくる</button>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="w-full max-w-4xl mx-auto px-4 py-4 flex-grow">
+
+        <!-- VIEW 1: TOP / HERO SCREEN -->
+        <section id="view-top" class="fade-in space-y-8">
+            <div class="glass-hero rounded-3xl p-6 sm:p-12 text-center shadow-lg relative overflow-hidden border border-white/80">
+                <!-- Decorative subtle blur circles -->
+                <div class="absolute -top-12 -left-12 w-40 h-40 bg-pink-300/40 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-blue-300/40 rounded-full blur-2xl"></div>
+
+                <div class="relative z-10 max-w-xl mx-auto space-y-6">
+                    <div class="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 bg-white/80 rounded-full shadow-sm text-brandAccent text-xs font-semibold tracking-wider">
+                        <i class="fa-solid fa-music"></i> 歌い手・歌ってみた特化型図鑑
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-800 tracking-wide leading-tight">
+                        私の歌声図鑑
+                    </h1>
+
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-medium">
+                        歌い手の「歌声」が好きな、<br class="hidden sm:inline">
+                        あなたの好みや感性でつくる図鑑
+                    </p>
+
+                    <div class="pt-4">
+                        <button onclick="startWizard()" class="w-full sm:w-auto px-8 py-4 bg-brandAccent hover:bg-brandAccentHover text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2 mx-auto text-base">
+                            図鑑をつくる <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concept Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="soft-card p-6 text-center space-y-2">
+                    <div class="w-12 h-12 bg-pink-100 text-pink-500 rounded-2xl flex items-center justify-center mx-auto text-xl mb-3">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">1. 推しを選曲</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">20のこだわりお題＋追加お題にあなたの好きな「歌ってみた」動画を割り当て。</p>
+                </div>
+                <div class="soft-card p-6 text-center space-y-2">
+                    <div class="w-12 h-12 bg-indigo-100 text-brandAccent rounded-2xl flex items-center justify-center mx-auto text-xl mb-3">
+                        <i class="fa-solid fa-border-all"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">2. コラージュ生成</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">正方形のサムネイル画像一覧を自動生成。SNSで映える美しさ。</p>
+                </div>
+                <div class="soft-card p-6 text-center space-y-2">
+                    <div class="w-12 h-12 bg-purple-100 text-purple-500 rounded-2xl flex items-center justify-center mx-auto text-xl mb-3">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">3. Xで共有</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">図鑑画像を添付し、個別ページURLと一緒に投稿して広めよう！</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: WIZARD / QUESTION WORKFLOW -->
+        <section id="view-wizard" class="hidden fade-in max-w-xl mx-auto space-y-6">
+            <!-- Progress & Navigation -->
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-500 px-2">
+                <button onclick="prevStep()" id="btn-wizard-prev" class="hover:text-slate-800 flex items-center gap-1">
+                    <i class="fa-solid fa-chevron-left text-xxs"></i> もどる
+                </button>
+                <div id="wizard-progress-text" class="text-brandAccent tracking-widest font-bold text-sm">
+                    01 / 30
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-white/60 h-2 rounded-full overflow-hidden shadow-inner">
+                <div id="wizard-progress-bar" class="bg-brandAccent h-full transition-all duration-300 w-0"></div>
+            </div>
+
+            <!-- STEP CONTAINER -->
+            <div class="soft-card p-6 sm:p-8 space-y-6">
+                
+                <!-- Step: Nickname Input -->
+                <div id="step-nickname" class="wizard-step-content space-y-4">
+                    <div class="text-center space-y-2">
+                        <h2 class="text-xl font-bold text-slate-800">あなたのニックネーム</h2>
+                        <p class="text-xs text-slate-500">図鑑の作成者名として表示されます</p>
+                    </div>
+                    <input type="text" id="input-nickname" placeholder="例：うたずかん" maxlength="25"
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-brandAccent/50 text-center font-bold">
+                    <button onclick="nextStep()" class="w-full py-3.5 bg-brandAccent hover:bg-brandAccentHover text-white font-bold rounded-2xl shadow transition-all">
+                        はじめる <i class="fa-solid fa-chevron-right text-xs ml-1"></i>
+                    </button>
+                </div>
+
+                <!-- Step: Question (Fixed & Additional) -->
+                <div id="step-question" class="wizard-step-content space-y-5 hidden">
+                    <!-- Dropdown selector for dynamic additional questions -->
+                    <div id="additional-select-container" class="hidden space-y-2">
+                        <label class="block text-xs font-bold text-slate-500">お題を選択または入力</label>
+                        <select id="select-additional-preset" onchange="handlePresetSelectChange()" class="w-full p-3 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-brandAccent">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <input type="text" id="input-custom-question" placeholder="自作のお題を入力してください" class="hidden w-full p-3 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brandAccent">
+                    </div>
+
+                    <!-- Question Callout Box (Soft Pink Tinted) -->
+                    <div class="bg-brandSoftPink border border-pink-100 p-6 rounded-2xl text-center shadow-sm">
+                        <p id="question-text-display" class="font-bold text-slate-800 text-base sm:text-lg leading-relaxed">
+                            お題文章がここに入ります
+                        </p>
+                    </div>
+
+                    <!-- YouTube URL Input -->
+                    <div class="space-y-2">
+                        <div class="relative flex items-center">
+                            <span class="absolute left-4 text-slate-400 text-sm">
+                                <i class="fa-solid fa-link"></i>
+                            </span>
+                            <input type="text" id="input-youtube-url" oninput="handleUrlInput(this.value)" placeholder="YouTube の動画URLを入力" 
+                                class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brandAccent">
+                        </div>
+                        <p class="text-[11px] text-slate-400 px-1">※空欄のまま「つぎへ」を押すことでスキップできます</p>
+                    </div>
+
+                    <!-- Live Video Preview -->
+                    <div id="video-preview-box" class="hidden rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 p-3 space-y-2">
+                        <div class="aspect-video w-full rounded-xl overflow-hidden bg-black relative group">
+                            <img id="preview-thumbnail" src="" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fa-solid fa-play text-white text-3xl"></i>
+                            </div>
+                        </div>
+                        <div id="preview-title" class="text-xs font-bold text-slate-700 truncate px-1">
+                            YouTube Video
+                        </div>
+                    </div>
+
+                    <!-- Step Navigation Buttons -->
+                    <div class="pt-2 space-y-2">
+                        <button onclick="nextStep()" class="w-full py-3.5 bg-brandSoftPink hover:bg-pink-100 text-brandAccent font-bold rounded-full shadow-sm border border-pink-200/50 transition-all flex items-center justify-center gap-2">
+                            つぎへ <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                        
+                        <div id="add-more-questions-trigger" class="hidden text-center pt-2">
+                            <button onclick="addOptionalQuestionSlot()" class="text-xs font-bold text-brandAccent hover:underline">
+                                <i class="fa-solid fa-plus-circle"></i> お題を追加する (最大10個)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step: Special Section "さいごに" -->
+                <div id="step-saigoni" class="wizard-step-content space-y-5 hidden">
+                    <div class="text-center space-y-1">
+                        <span class="inline-block px-3 py-1 bg-purple-100 text-purple-600 font-bold text-xs rounded-full">特別枠</span>
+                        <h2 class="text-2xl font-black text-slate-800">さいごに</h2>
+                    </div>
+
+                    <div class="bg-purple-50/70 border border-purple-100 p-5 rounded-2xl text-center">
+                        <p class="font-bold text-slate-800 text-base sm:text-lg">
+                            この歌い手にこの曲を歌ってほしい！
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">① 歌い手のYouTubeチャンネルURLまたはお名前</label>
+                            <input type="text" id="input-saigoni-singer" placeholder="例: 歌い手名 / https://youtube.com/@..." 
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">② 歌ってほしい楽曲のYouTube URL</label>
+                            <input type="text" id="input-saigoni-song" placeholder="例: https://youtu.be/..." 
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+                        </div>
+                    </div>
+
+                    <button onclick="finishWizard()" class="w-full py-4 bg-brandAccent hover:bg-brandAccentHover text-white font-bold rounded-2xl shadow-lg transition-all text-sm">
+                        図鑑を完成させる <i class="fa-solid fa-check ml-1"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- VIEW 3: CONFIRMATION & COMPLETED SCREEN -->
+        <section id="view-completed" class="hidden fade-in space-y-8">
+            <div class="soft-card p-6 sm:p-10 text-center space-y-6">
+                <div class="space-y-2">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-pink-100 text-pink-600 font-bold text-xs rounded-full">
+                        <i class="fa-solid fa-sparkles"></i> 完成！
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-slate-800" id="completed-title-nickname">
+                        わたしの歌声図鑑
+                    </h2>
+                    <p class="text-xs text-slate-500">生成された画像とリンクを使ってXでシェアしましょう</p>
+                </div>
+
+                <!-- Collage Grid Display -->
+                <div class="max-w-md mx-auto p-3 bg-white rounded-2xl shadow-inner border border-slate-100">
+                    <div id="preview-grid-collage" class="grid grid-cols-4 gap-1.5 aspect-square bg-slate-100 rounded-xl overflow-hidden p-1.5">
+                        <!-- Thumbnails dynamically rendered -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+                    <button onclick="downloadCanvasCollage()" class="w-full sm:w-1/2 py-3.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-full shadow-sm transition-all text-xs sm:text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-download text-brandAccent"></i> 画像を保存
+                    </button>
+                    <button onclick="shareToX()" class="w-full sm:w-1/2 py-3.5 bg-black hover:bg-slate-800 text-white font-bold rounded-full shadow-md transition-all text-xs sm:text-sm flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-x-twitter"></i> Xでシェア
+                    </button>
+                </div>
+
+                <!-- Copy Link Bar -->
+                <div class="max-w-md mx-auto flex items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-200">
+                    <input type="text" id="share-link-input" readonly class="w-full bg-transparent text-xs text-slate-600 px-2 outline-none font-mono truncate">
+                    <button onclick="copyShareLink()" class="px-4 py-2 bg-brandAccent hover:bg-brandAccentHover text-white text-xs font-bold rounded-xl whitespace-nowrap transition-colors">
+                        コピー
+                    </button>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100">
+                    <button onclick="navigateTo('view-individual')" class="text-xs font-bold text-brandAccent hover:underline">
+                        一覧で詳しくみる（個別ページを表示） <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: INDIVIDUAL PUBLIC ENCYCLOPEDIA VIEW -->
+        <section id="view-individual" class="hidden fade-in space-y-6">
+            <div class="soft-card p-6 sm:p-8 space-y-6">
+                <!-- Top Header Info -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-6">
+                    <div>
+                        <span class="text-xs font-bold text-brandAccent uppercase tracking-widest">VOCAL ENCYCLOPEDIA</span>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800" id="view-nickname-title">
+                            わたしの歌声図鑑
+                        </h1>
+                    </div>
+                    <button onclick="startWizard()" class="px-5 py-2.5 bg-brandAccent hover:bg-brandAccentHover text-white text-xs font-bold rounded-full shadow transition-all">
+                        自分も作ってみる
+                    </button>
+                </div>
+
+                <!-- Individual Answer List -->
+                <div id="individual-answers-list" class="space-y-4">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Special Section "さいごに" Card -->
+                <div id="individual-saigoni-card" class="hidden bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-2xl p-5 space-y-3">
+                    <div class="flex items-center gap-2 text-purple-600 font-bold text-sm">
+                        <i class="fa-solid fa-star"></i> さいごに
+                    </div>
+                    <div class="font-bold text-slate-800 text-sm sm:text-base">
+                        この歌い手にこの曲を歌ってほしい！
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
+                        <div class="bg-white/80 p-3 rounded-xl border border-purple-100">
+                            <span class="text-slate-400 block text-xxs font-bold uppercase">Singer</span>
+                            <span id="display-saigoni-singer" class="font-bold text-slate-800"></span>
+                        </div>
+                        <div class="bg-white/80 p-3 rounded-xl border border-purple-100">
+                            <span class="text-slate-400 block text-xxs font-bold uppercase">Song URL</span>
+                            <a id="display-saigoni-song" href="#" target="_blank" class="font-bold text-brandAccent hover:underline truncate block"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full max-w-4xl mx-auto px-4 py-6 text-center text-xs text-slate-500 font-medium">
+        <p>#私の歌声図鑑 &copy; 2026 - 好きな歌声、集めてみた</p>
+    </footer>
+
+    <!-- HIDDEN CANVAS FOR HIGH-RES 1080x1080 SQUARE COLLAGE GENERATION -->
+    <canvas id="collage-canvas" width="1080" height="1080" class="hidden"></canvas>
+
+    <!-- UI MESSAGE TOAST -->
+    <div id="toast-message" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs font-bold px-5 py-3 rounded-full shadow-xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-green-400"></i>
+        <span id="toast-text">メッセージ</span>
+    </div>
+
+    <!-- FIREBASE MODULE & APPLICATION LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-analytics.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAx_eNBGZtczHdDXQPUbXo0h-gZISc6shQ",
+            authDomain: "my-vocal-list-51bb8.firebaseapp.com",
+            projectId: "my-vocal-list-51bb8",
+            storageBucket: "my-vocal-list-51bb8.firebasestorage.app",
+            messagingSenderId: "246309398539",
+            appId: "1:246309398539:web:efc9fe2f2de54c6cafbf0e",
+            measurementId: "G-KBP25340KF"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // DATA CONSTANTS
+        const FIXED_QUESTIONS = [
+            "1. 自分の理想の歌ってみたは？",
+            "2. 高音が好きな歌ってみたは？",
+            "3. 低音が好きな歌ってみたは？",
+            "4. がなりやシャウトが刺さる歌ってみたは？",
+            "5. 透明感に惹かれる歌ってみたは？",
+            "6. 色気を感じる歌ってみたは？",
+            "7. 聴くとテンションが上がる歌ってみたは？",
+            "8. ずっと聴いていたくなる心地よい歌ってみたは？",
+            "9. 夜中に一人で浸りたい歌ってみたは？",
+            "10. 辛い時に聴きたい歌ってみたは？",
+            "11. 恋に落ちそうになる歌ってみたは？",
+            "12. ギャップにやられた歌ってみたは？",
+            "13. 「美しい」と感じる歌ってみたは？",
+            "14. 歌詞の表現が特に好きな歌い手は？",
+            "15. 解釈の仕方に惚れた歌ってみたは？",
+            "16. もっと評価されるべき歌ってみたは？",
+            "17. 初めて聴いた時の衝撃を忘れられない歌声は？",
+            "18. 歌い手を好きになったきっかけの動画は？",
+            "19. あなたの青春を象徴する歌ってみたは？",
+            "20. みんなに聞いて欲しい歌ってみたは？"
+        ];
+
+        const ADDITIONAL_PRESETS = [
+            "息遣いにこだわりを感じる歌ってみたは？",
+            "テクニックを感じる歌ってみたは？",
+            "あなたが目指している歌ってみたは？",
+            "メロい女性歌い手は？",
+            "メロい男性歌い手は？",
+            "生歌も上手い歌い手は？",
+            "バブみのある歌い手といえば？",
+            "ラスサビで鳥肌が立つ歌ってみたは？",
+            "A メロ B メロにこだわりを感じる歌ってみたは？",
+            "落ちサビが感動する歌ってみたは？",
+            "ラップがイケてる歌ってみたは？",
+            "選曲が歌声にマッチしている歌ってみたは？",
+            "好きなバラード系の歌ってみたは？",
+            "MIX まで含めて好きな歌ってみたは？",
+            "イラスト・MV まで含めて好きな歌ってみたは？",
+            "300 回再生以内の神歌ってみたは？",
+            "誰にも言いたくない自分だけの推し歌ってみたは？",
+            "海で流したい歌ってみたは？",
+            "パーティで流したい歌ってみたは？",
+            "クラブで流したい歌ってみたは？",
+            "（自分で入力する）"
+        ];
+
+        // STATE APP DATA
+        window.appState = {
+            currentStepIndex: 0, // 0 = Nickname, 1..20 = Fixed, 21..N = Additional, N+1 = Saigoni
+            nickname: '',
+            questionsList: [...FIXED_QUESTIONS],
+            answers: [], // Array of { question, url, videoId }
+            saigoni: { singer: '', songUrl: '' },
+            docId: null
+        };
+
+        // YOUTUBE HELPER FUNCTIONS
+        window.extractYouTubeId = function(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        };
+
+        window.getYouTubeThumbnail = function(videoId) {
+            if (!videoId) return 'https://placehold.co/600x600/f6e0e9/6486ec?text=No+Video';
+            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        };
+
+        // NAVIGATION LOGIC
+        window.navigateTo = function(viewId) {
+            ['view-top', 'view-wizard', 'view-completed', 'view-individual'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(viewId.startsWith('view-') ? viewId : `view-${viewId}`);
+            if (target) target.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // WIZARD CONTROLLER
+        window.startWizard = function() {
+            window.appState.currentStepIndex = 0;
+            window.appState.questionsList = [...FIXED_QUESTIONS];
+            window.appState.answers = [];
+            document.getElementById('input-nickname').value = window.appState.nickname || '';
+            renderStep();
+            navigateTo('view-wizard');
+        };
+
+        window.renderStep = function() {
+            const idx = window.appState.currentStepIndex;
+            const totalQuestions = window.appState.questionsList.length;
+
+            // Hide all step containers inside wizard
+            document.querySelectorAll('.wizard-step-content').forEach(el => el.classList.add('hidden'));
+
+            if (idx === 0) {
+                // Nickname Step
+                document.getElementById('step-nickname').classList.remove('hidden');
+                document.getElementById('wizard-progress-text').innerText = `STEP 00`;
+                document.getElementById('wizard-progress-bar').style.width = `0%`;
+            } else if (idx <= totalQuestions) {
+                // Question Step
+                document.getElementById('step-question').classList.remove('hidden');
+                
+                const qNum = idx;
+                const questionText = window.appState.questionsList[idx - 1];
+                const currentAns = window.appState.answers[idx - 1] || { question: questionText, url: '', videoId: null };
+
+                // Progress Update
+                document.getElementById('wizard-progress-text').innerText = `${String(qNum).padStart(2, '0')} / ${totalQuestions}`;
+                document.getElementById('wizard-progress-bar').style.width = `${(qNum / (totalQuestions + 1)) * 100}%`;
+
+                const addContainer = document.getElementById('additional-select-container');
+                const triggerBox = document.getElementById('add-more-questions-trigger');
+
+                // Fixed vs Additional Question UI
+                if (idx > 20) {
+                    addContainer.classList.remove('hidden');
+                    populateAdditionalDropdown(currentAns.question);
+                } else {
+                    addContainer.classList.add('hidden');
+                }
+
+                // Show "Add optional question" at index 20 or above if total < 30
+                if (idx >= 20 && window.appState.questionsList.length < 30) {
+                    triggerBox.classList.remove('hidden');
+                } else {
+                    triggerBox.classList.add('hidden');
+                }
+
+                document.getElementById('question-text-display').innerText = currentAns.question || questionText;
+                document.getElementById('input-youtube-url').value = currentAns.url || '';
+                
+                handleUrlInput(currentAns.url || '');
+            } else {
+                // Special Section "さいごに"
+                document.getElementById('step-saigoni').classList.remove('hidden');
+                document.getElementById('wizard-progress-text').innerText = `さいごに`;
+                document.getElementById('wizard-progress-bar').style.width = `100%`;
+            }
+        };
+
+        window.populateAdditionalDropdown = function(selectedQuestionText) {
+            const select = document.getElementById('select-additional-preset');
+            select.innerHTML = '';
+
+            // Selected questions in other slots to avoid duplicates
+            const usedQuestions = window.appState.answers.map((a, i) => i !== (window.appState.currentStepIndex - 1) ? a.question : null).filter(Boolean);
+
+            ADDITIONAL_PRESETS.forEach(preset => {
+                const option = document.createElement('option');
+                option.value = preset;
+                option.textContent = preset;
+                if (usedQuestions.includes(preset) && preset !== "（自分で入力する）") {
+                    option.disabled = true;
+                }
+                select.appendChild(option);
+            });
+
+            if (selectedQuestionText && ADDITIONAL_PRESETS.includes(selectedQuestionText)) {
+                select.value = selectedQuestionText;
+            } else if (selectedQuestionText) {
+                select.value = "（自分で入力する）";
+                document.getElementById('input-custom-question').classList.remove('hidden');
+                document.getElementById('input-custom-question').value = selectedQuestionText;
+            }
+            handlePresetSelectChange();
+        };
+
+        window.handlePresetSelectChange = function() {
+            const selectVal = document.getElementById('select-additional-preset').value;
+            const customInput = document.getElementById('input-custom-question');
+            
+            if (selectVal === "（自分で入力する）") {
+                customInput.classList.remove('hidden');
+                document.getElementById('question-text-display').innerText = customInput.value || "自作のお題を入力してください";
+            } else {
+                customInput.classList.add('hidden');
+                document.getElementById('question-text-display').innerText = selectVal;
+            }
+        };
+
+        document.getElementById('input-custom-question').addEventListener('input', function(e) {
+            document.getElementById('question-text-display').innerText = e.target.value || "自作のお題を入力してください";
+        });
+
+        window.handleUrlInput = function(url) {
+            const videoId = extractYouTubeId(url);
+            const previewBox = document.getElementById('video-preview-box');
+            if (videoId) {
+                document.getElementById('preview-thumbnail').src = getYouTubeThumbnail(videoId);
+                document.getElementById('preview-title').innerText = `YouTube ID: ${videoId}`;
+                previewBox.classList.remove('hidden');
+            } else {
+                previewBox.classList.add('hidden');
+            }
+        };
+
+        window.nextStep = function() {
+            const idx = window.appState.currentStepIndex;
+
+            if (idx === 0) {
+                const nickname = document.getElementById('input-nickname').value.trim();
+                if (!nickname) {
+                    showToast("ニックネームを入力してください");
+                    return;
+                }
+                window.appState.nickname = nickname;
+            } else if (idx <= window.appState.questionsList.length) {
+                // Save answer
+                let currentQ = window.appState.questionsList[idx - 1];
+                if (idx > 20) {
+                    const presetVal = document.getElementById('select-additional-preset').value;
+                    if (presetVal === "（自分で入力する）") {
+                        currentQ = document.getElementById('input-custom-question').value.trim() || "自作お題";
+                    } else {
+                        currentQ = presetVal;
+                    }
+                    window.appState.questionsList[idx - 1] = currentQ;
+                }
+
+                const url = document.getElementById('input-youtube-url').value.trim();
+                const videoId = extractYouTubeId(url);
+
+                window.appState.answers[idx - 1] = {
+                    question: currentQ,
+                    url: url,
+                    videoId: videoId
+                };
+            }
+
+            window.appState.currentStepIndex++;
+            renderStep();
+        };
+
+        window.prevStep = function() {
+            if (window.appState.currentStepIndex > 0) {
+                window.appState.currentStepIndex--;
+                renderStep();
+            } else {
+                navigateTo('top');
+            }
+        };
+
+        window.addOptionalQuestionSlot = function() {
+            if (window.appState.questionsList.length < 30) {
+                const nextNum = window.appState.questionsList.length + 1;
+                window.appState.questionsList.push(`追加お題 ${nextNum - 20}`);
+                showToast(`追加枠 ${nextNum - 20} を増やしました`);
+                renderStep();
+            }
+        };
+
+        // FINISH WIZARD & SAVE TO FIRESTORE
+        window.finishWizard = async function() {
+            const singer = document.getElementById('input-saigoni-singer').value.trim();
+            const song = document.getElementById('input-saigoni-song').value.trim();
+
+            window.appState.saigoni = {
+                singer: singer,
+                songUrl: song
+            };
+
+            const docId = 'vocal_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
+            window.appState.docId = docId;
+
+            const payload = {
+                nickname: window.appState.nickname,
+                answers: window.appState.answers,
+                saigoni: window.appState.saigoni,
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                // Save doc in Firestore
+                await setDoc(doc(db, "vocal_lists", docId), payload);
+            } catch (err) {
+                console.warn("Firestore Save Warning (using local state fallback):", err);
+            }
+
+            renderCompletedScreen();
+            navigateTo('view-completed');
+        };
+
+        // RENDER COMPLETED SCREEN
+        window.renderCompletedScreen = function() {
+            document.getElementById('completed-title-nickname').innerText = `${window.appState.nickname} の歌声図鑑`;
+
+            // Populate Collage Grid Preview
+            const gridContainer = document.getElementById('preview-grid-collage');
+            gridContainer.innerHTML = '';
+
+            const validThumbnails = window.appState.answers.filter(a => a && a.videoId);
+            const thumbsToShow = validThumbnails.length > 0 ? validThumbnails : Array(16).fill({ videoId: null });
+
+            thumbsToShow.slice(0, 16).forEach(ans => {
+                const img = document.createElement('img');
+                img.src = getYouTubeThumbnail(ans.videoId);
+                img.className = 'w-full h-full object-cover rounded-lg shadow-sm';
+                gridContainer.appendChild(img);
+            });
+
+            // Set share URL
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${window.appState.docId}`;
+            document.getElementById('share-link-input').value = shareUrl;
+
+            // Generate Square Canvas Image behind the scenes
+            generateCollageCanvas(thumbsToShow);
+        };
+
+        // DRAW 1080x1080 SQUARE COLLAGE CANVAS
+        window.generateCollageCanvas = function(items) {
+            const canvas = document.getElementById('collage-canvas');
+            const ctx = canvas.getContext('2d');
+            const size = 1080;
+
+            // Background pastel fill
+            ctx.fillStyle = '#F6E0E9';
+            ctx.fillRect(0, 0, size, size);
+
+            // Card container white background
+            const margin = 50;
+            const cardWidth = size - margin * 2;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.roundRect(margin, margin, cardWidth, cardWidth, 40);
+            ctx.fill();
+
+            // Draw Header Title in Canvas
+            ctx.fillStyle = '#333745';
+            ctx.font = 'bold 36px "Yu Gothic", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${window.appState.nickname} の歌声図鑑`, size / 2, 120);
+
+            ctx.fillStyle = '#6486EC';
+            ctx.font = 'bold 20px "Yu Gothic", sans-serif';
+            ctx.fillText('#私の歌声図鑑', size / 2, 155);
+
+            // Draw Grid Collage (4x4)
+            const gridPadding = 80;
+            const gridTop = 190;
+            const gridAreaSize = size - gridPadding * 2;
+            const gap = 16;
+            const cols = 4;
+            const cellSide = (gridAreaSize - gap * (cols - 1)) / cols;
+
+            const loadImages = items.slice(0, 16).map(item => {
+                return new Promise(resolve => {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = () => resolve(img);
+                    img.onerror = () => {
+                        const fallback = new Image();
+                        fallback.src = 'https://placehold.co/300x300/f6e0e9/6486ec?text=Vocal';
+                        fallback.onload = () => resolve(fallback);
+                    };
+                    img.src = getYouTubeThumbnail(item.videoId);
+                });
+            });
+
+            Promise.all(loadImages).then(images => {
+                images.forEach((img, index) => {
+                    const col = index % cols;
+                    const row = Math.floor(index / cols);
+                    const x = gridPadding + col * (cellSide + gap);
+                    const y = gridTop + row * (cellSide + gap);
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.roundRect(x, y, cellSide, cellSide, 16);
+                    ctx.clip();
+                    ctx.drawImage(img, x, y, cellSide, cellSide);
+                    ctx.restore();
+                });
+            });
+        };
+
+        window.downloadCanvasCollage = function() {
+            const canvas = document.getElementById('collage-canvas');
+            const link = document.createElement('a');
+            link.download = `${window.appState.nickname}_歌声図鑑.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast("正方形画像をダウンロードしました！");
+        };
+
+        window.shareToX = function() {
+            const text = encodeURIComponent(`「${window.appState.nickname}」の歌声図鑑を作成しました！✨\n#私の歌声図鑑 #歌ってみた\n`);
+            const url = encodeURIComponent(document.getElementById('share-link-input').value);
+            window.open(`https://x.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        };
+
+        window.copyShareLink = function() {
+            const input = document.getElementById('share-link-input');
+            input.select();
+            document.execCommand('copy');
+            showToast("リンクをクリップボードにコピーしました！");
+        };
+
+        // INDIVIDUAL VIEW LOADER
+        window.loadIndividualView = async function(docId) {
+            try {
+                const docSnap = await getDoc(doc(db, "vocal_lists", docId));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    renderIndividualPage(data);
+                    navigateTo('view-individual');
+                } else {
+                    showToast("指定された図鑑が見つかりませんでした");
+                    navigateTo('top');
+                }
+            } catch (e) {
+                console.error(e);
+                navigateTo('top');
+            }
+        };
+
+        window.renderIndividualPage = function(data) {
+            document.getElementById('view-nickname-title').innerText = `${data.nickname} の歌声図鑑`;
+            const container = document.getElementById('individual-answers-list');
+            container.innerHTML = '';
+
+            data.answers.forEach((ans, i) => {
+                if (!ans.url && !ans.videoId) return;
+
+                const card = document.createElement('div');
+                card.className = 'bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:shadow-sm transition-shadow';
+
+                const thumb = document.createElement('img');
+                thumb.src = getYouTubeThumbnail(ans.videoId);
+                thumb.className = 'w-full sm:w-36 aspect-video sm:aspect-square object-cover rounded-xl shadow-xs';
+
+                const body = document.createElement('div');
+                body.className = 'space-y-2 flex-grow';
+                body.innerHTML = `
+                    <div class="text-xs font-bold text-brandAccent">Q${i + 1}</div>
+                    <div class="font-bold text-slate-800 text-sm sm:text-base">${ans.question}</div>
+                    ${ans.url ? `<a href="${ans.url}" target="_blank" class="inline-flex items-center gap-1 text-xs font-bold text-red-500 hover:underline"><i class="fa-brands fa-youtube"></i> YouTubeで聴く</a>` : ''}
+                `;
+
+                card.appendChild(thumb);
+                card.appendChild(body);
+                container.appendChild(card);
+            });
+
+            if (data.saigoni && (data.saigoni.singer || data.saigoni.songUrl)) {
+                const saigoniCard = document.getElementById('individual-saigoni-card');
+                saigoniCard.classList.remove('hidden');
+                document.getElementById('display-saigoni-singer').innerText = data.saigoni.singer || '-';
+                const songLink = document.getElementById('display-saigoni-song');
+                songLink.innerText = data.saigoni.songUrl || '-';
+                songLink.href = data.saigoni.songUrl || '#';
+            }
+        };
+
+        // TOAST MESSAGE
+        window.showToast = function(msg) {
+            const toast = document.getElementById('toast-message');
+            document.getElementById('toast-text').innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        };
+
+        // INITIAL ROUTING ON LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const docId = urlParams.get('id');
+            if (docId) {
+                loadIndividualView(docId);
+            }
+        });
+    </script>
+</body>
+</html>
